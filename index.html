@@ -1515,35 +1515,7 @@
                 }, 2000);
             }
 
-            function createPredictionMessage(predictionData) {
-                const confidencePercentage = Math.round(predictionData.confidence);
-                const confidenceWidth = `${confidencePercentage}%`;
-                
-                const numbersHTML = `
-                    <div class="predicted-numbers">
-                        ${predictionData.numbers.map(num => `
-                            <div class="predicted-number ${num <= 4 ? 'small' : 'big'}">${num}</div>
-                        `).join('')}
-                    </div>
-                `;
-                
-                // Create recovery level indicators
-                const recoveryDots = [];
-                for (let i = 0; i < 4; i++) {
-                    let dotClass = 'recovery-dot';
-                    if (i < predictionData.recoveryLevel) {
-                        dotClass += predictionData.recoveryLevel >= 4 ? ' critical' : ' active';
-                    }
-                    recoveryDots.push(`<div class="${dotClass}"></div>`);
-                }
-                
-                let recoveryStatus = '';
-                if (predictionData.recoveryLevel > 0) {
-                    recoveryStatus = predictionData.recoveryLevel >= 4 ? 
-                        `<div class="recovery-status critical">CRITICAL RECOVERY MODE - LEVEL ${predictionData.recoveryLevel}</div>` :
-                        `<div class="recovery-status warning">RECOVERY MODE - LEVEL ${predictionData.recoveryLevel}</div>`;
-                }
-                
+            function createOppositePredictionMessage(predictionData) {
                 // Determine opposite prediction
                 const oppositePrediction = predictionData.prediction === "BIG" ? "SMALL" : "BIG";
                 const oppositeNumbers = oppositePrediction === "SMALL" 
@@ -1554,33 +1526,20 @@
                 return `
                     <div class="prediction-card">
                         <div class="period-display">${latestPeriod}</div>
-                        <div class="prediction-value">${predictionData.prediction}</div>
+                        <div class="prediction-value">${oppositePrediction}</div>
                         
-                        ${numbersHTML}
+                        <div class="predicted-numbers">
+                            ${uniqueOppositeNumbers.map(num => `
+                                <div class="predicted-number ${num <= 4 ? 'small' : 'big'}">${num}</div>
+                            `).join('')}
+                        </div>
                         
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${confidenceWidth}"></div>
+                            <div class="progress-fill" style="width: 85%"></div>
                         </div>
                         <div class="confidence-display">
                             <span>Confidence</span>
-                            <span class="confidence-value">${confidencePercentage}%</span>
-                        </div>
-                        
-                        ${predictionData.recoveryLevel > 0 ? `
-                        <div class="recovery-level">
-                            ${recoveryDots.join('')}
-                        </div>
-                        ${recoveryStatus}
-                        ` : ''}
-                        
-                        <div class="opposite-prediction">
-                            <div class="opposite-title">Opposite Prediction (Fallback)</div>
-                            <div class="opposite-value">${oppositePrediction}</div>
-                            <div class="predicted-numbers">
-                                ${uniqueOppositeNumbers.map(num => `
-                                    <div class="predicted-number ${num <= 4 ? 'small' : 'big'}">${num}</div>
-                                `).join('')}
-                            </div>
+                            <span class="confidence-value">85%</span>
                         </div>
                     </div>
                 `;
@@ -1593,11 +1552,11 @@
                 if (result.issueNumber !== latestPeriod) {
                     latestPeriod = result.issueNumber;
                     previousResults = await fetchPreviousResults();
-                    updatePredictions(now, latestPeriod);
+                    updateOppositePredictions(now, latestPeriod);
                 }
             }
 
-            function updatePredictions(currentTime, currentPeriod) {
+            function updateOppositePredictions(currentTime, currentPeriod) {
                 if (previousResults.length >= 10 && currentPeriod !== lastPredictionPeriod) {
                     const last10Numbers = previousResults.map(r => parseInt(r.number, 10));
                     
@@ -1607,36 +1566,13 @@
                     // Make prediction using our enhanced system
                     const predictionResult = predictUltra(currentPeriod);
                     
-                    // Get 1-2 random numbers for the predicted category
-                    const numbers = predictionResult === "SMALL" 
-                        ? [Math.floor(Math.random() * 5), Math.floor(Math.random() * 5)]
-                        : [5 + Math.floor(Math.random() * 5), 5 + Math.floor(Math.random() * 5)];
-                    
-                    // Remove duplicates and limit to 2 numbers
-                    const uniqueNumbers = [...new Set(numbers)].slice(0, 2);
-                    
-                    // Calculate confidence based on recovery level and patterns
-                    let confidence = 75;
-                    if (predictionState.recoveryLevel > 0) {
-                        confidence = 85 - (predictionState.recoveryLevel * 5);
-                    } else {
-                        // Higher confidence if we detect strong patterns
-                        const digits = currentPeriod.slice(-4).split('').map(Number);
-                        if (fibonacciPattern(digits) || isArithmeticSequence(digits) || digitSymmetry(digits)) {
-                            confidence = 90;
-                        }
-                    }
-                    
-                    currentPrediction = predictionResult;
-                    lastPredictionPeriod = currentPeriod;
-                    
-                    // Show prediction message
+                    // Show opposite prediction message
                     showTyping();
                     setTimeout(() => {
-                        addMessage('received', createPredictionMessage({
+                        addMessage('received', createOppositePredictionMessage({
                             prediction: predictionResult,
-                            confidence: confidence,
-                            numbers: uniqueNumbers,
+                            confidence: 85,
+                            numbers: [],
                             recoveryLevel: predictionState.recoveryLevel
                         }), 'Zmx Trader');
                     }, 1000);
