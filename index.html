@@ -767,6 +767,28 @@
             transition: width 0.3s ease;
         }
 
+        /* Opposite Prediction Styles */
+        .opposite-prediction {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .opposite-title {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 5px;
+        }
+
+        .opposite-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--warning);
+        }
+
         /* Responsive Adjustments */
         @media (max-width: 768px) {
             .game-list {
@@ -1522,6 +1544,13 @@
                         `<div class="recovery-status warning">RECOVERY MODE - LEVEL ${predictionData.recoveryLevel}</div>`;
                 }
                 
+                // Determine opposite prediction
+                const oppositePrediction = predictionData.prediction === "BIG" ? "SMALL" : "BIG";
+                const oppositeNumbers = oppositePrediction === "SMALL" 
+                    ? [Math.floor(Math.random() * 5), Math.floor(Math.random() * 5)]
+                    : [5 + Math.floor(Math.random() * 5), 5 + Math.floor(Math.random() * 5)];
+                const uniqueOppositeNumbers = [...new Set(oppositeNumbers)].slice(0, 2);
+                
                 return `
                     <div class="prediction-card">
                         <div class="period-display">${latestPeriod}</div>
@@ -1543,6 +1572,16 @@
                         </div>
                         ${recoveryStatus}
                         ` : ''}
+                        
+                        <div class="opposite-prediction">
+                            <div class="opposite-title">Opposite Prediction (Fallback)</div>
+                            <div class="opposite-value">${oppositePrediction}</div>
+                            <div class="predicted-numbers">
+                                ${uniqueOppositeNumbers.map(num => `
+                                    <div class="predicted-number ${num <= 4 ? 'small' : 'big'}">${num}</div>
+                                `).join('')}
+                            </div>
+                        </div>
                     </div>
                 `;
             }
