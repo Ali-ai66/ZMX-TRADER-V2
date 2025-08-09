@@ -767,28 +767,6 @@
             transition: width 0.3s ease;
         }
 
-        /* Opposite Prediction Styles */
-        .opposite-prediction {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-        }
-
-        .opposite-title {
-            font-size: 0.8rem;
-            color: var(--text-dim);
-            margin-bottom: 5px;
-        }
-
-        .opposite-value {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--warning);
-        }
-
         /* Responsive Adjustments */
         @media (max-width: 768px) {
             .game-list {
@@ -1563,21 +1541,20 @@
                 }, 2000);
             }
 
-            function createOppositePredictionMessage(predictionData) {
-                // Determine opposite prediction
-                const oppositePrediction = predictionData.prediction === "BIG" ? "SMALL" : "BIG";
-                const oppositeNumbers = oppositePrediction === "SMALL" 
+            function createPredictionMessage(predictionData) {
+                // Generate numbers based on prediction
+                const predictionNumbers = predictionData.prediction === "SMALL" 
                     ? [Math.floor(Math.random() * 5), Math.floor(Math.random() * 5)]
                     : [5 + Math.floor(Math.random() * 5), 5 + Math.floor(Math.random() * 5)];
-                const uniqueOppositeNumbers = [...new Set(oppositeNumbers)].slice(0, 2);
+                const uniqueNumbers = [...new Set(predictionNumbers)].slice(0, 2);
                 
                 return `
                     <div class="prediction-card">
                         <div class="period-display">${latestPeriod}</div>
-                        <div class="prediction-value">${oppositePrediction}</div>
+                        <div class="prediction-value">${predictionData.prediction}</div>
                         
                         <div class="predicted-numbers">
-                            ${uniqueOppositeNumbers.map(num => `
+                            ${uniqueNumbers.map(num => `
                                 <div class="predicted-number ${num <= 4 ? 'small' : 'big'}">${num}</div>
                             `).join('')}
                         </div>
@@ -1600,11 +1577,11 @@
                 if (result.issueNumber !== latestPeriod) {
                     latestPeriod = result.issueNumber;
                     previousResults = await fetchPreviousResults();
-                    updateOppositePredictions(now, latestPeriod);
+                    updatePredictions(now, latestPeriod);
                 }
             }
 
-            function updateOppositePredictions(currentTime, currentPeriod) {
+            function updatePredictions(currentTime, currentPeriod) {
                 if (previousResults.length >= 10 && currentPeriod !== lastPredictionPeriod) {
                     const last10Numbers = previousResults.map(r => parseInt(r.number, 10));
                     
@@ -1614,10 +1591,10 @@
                     // Make prediction using our enhanced system
                     const predictionResult = predictUltra(currentPeriod);
                     
-                    // Show opposite prediction message
+                    // Show prediction message
                     showTyping();
                     setTimeout(() => {
-                        addMessage('received', createOppositePredictionMessage({
+                        addMessage('received', createPredictionMessage({
                             prediction: predictionResult,
                             confidence: 85,
                             numbers: [],
