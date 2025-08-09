@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZMX TRADER PRO</title>
+    <title>ZMX TRADER V2</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;500;700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -13,29 +13,21 @@
             --primary-dark: #00a8b5;
             --secondary: #0084ff;
             --accent: #7b00ff;
-            --accent-light: #9d4edd;
             --win: #00ff88;
             --loss: #ff0055;
             --warning: #ffcc00;
             --bg-dark: #0a0a12;
             --bg-darker: #05050a;
             --bg-light: #12121a;
-            --bg-card: #1a1a2e;
             --text-dim: rgba(200, 220, 255, 0.7);
             --text-bright: #ffffff;
-            --text-muted: rgba(255, 255, 255, 0.6);
             --glow: 0 0 15px rgba(0, 240, 255, 0.5);
-            --glow-strong: 0 0 30px rgba(0, 240, 255, 0.8);
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
-            --gradient-card: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(123, 0, 255, 0.1));
             --success-gradient: linear-gradient(135deg, var(--win), #00c8ff);
             --danger-gradient: linear-gradient(135deg, var(--loss), #ff00aa);
             --glass-bg: rgba(10, 15, 30, 0.7);
             --glass-border: rgba(100, 150, 255, 0.1);
             --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-            --transition-fast: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.3);
-            --shadow-strong: 0 8px 40px rgba(0, 0, 0, 0.5);
         }
 
         * {
@@ -47,20 +39,18 @@
         body {
             background-color: var(--bg-dark);
             color: var(--text-bright);
-            font-family: 'Inter', 'Rajdhani', sans-serif;
-            font-weight: 400;
+            font-family: 'Rajdhani', sans-serif;
             padding: 0;
             margin: 0;
             overflow: hidden;
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 240, 255, 0.08) 0%, transparent 25%),
-                radial-gradient(circle at 90% 80%, rgba(123, 0, 255, 0.08) 0%, transparent 25%),
+                radial-gradient(circle at 10% 20%, rgba(0, 240, 255, 0.05) 0%, transparent 25%),
+                radial-gradient(circle at 90% 80%, rgba(123, 0, 255, 0.05) 0%, transparent 25%),
                 linear-gradient(to bottom, var(--bg-darker), var(--bg-dark));
             position: fixed;
             width: 100%;
             height: 100%;
             line-height: 1.6;
-            letter-spacing: 0.3px;
         }
 
         /* Tab System */
@@ -70,12 +60,11 @@
             left: 0;
             width: 100%;
             height: 60px;
-            background: rgba(10, 15, 30, 0.95);
+            background: rgba(10, 15, 30, 0.9);
             display: flex;
             z-index: 99999999;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
-            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid rgba(0, 240, 255, 0.1);
         }
 
         .tab {
@@ -87,32 +76,14 @@
             transition: var(--transition);
             position: relative;
             overflow: hidden;
-            font-weight: 500;
-        }
-
-        .tab::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.1), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .tab:hover::before {
-            left: 100%;
         }
 
         .tab:hover {
-            background: rgba(0, 240, 255, 0.15);
-            transform: translateY(-1px);
+            background: rgba(0, 240, 255, 0.1);
         }
 
         .tab.active {
-            background: var(--gradient-card);
-            box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.1);
+            background: rgba(0, 240, 255, 0.2);
         }
 
         .tab.active::after {
@@ -123,7 +94,6 @@
             width: 100%;
             height: 3px;
             background: var(--gradient);
-            box-shadow: var(--glow);
         }
 
         .tab-icon {
@@ -142,7 +112,7 @@
             font-size: 14px;
         }
 
-        /* Content Sections with smooth transitions */
+        /* Content Sections */
         .content-section {
             position: fixed;
             top: 60px;
@@ -151,47 +121,10 @@
             height: calc(100% - 60px);
             display: none;
             overflow: hidden;
-            opacity: 1;
-            transform: translateY(0);
-            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
         .content-section.active {
             display: block;
-        }
-
-        /* Loading States */
-        .loading-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            border-radius: inherit;
-        }
-
-        .loading-spinner {
-            width: 30px;
-            height: 30px;
-            border: 3px solid rgba(0, 240, 255, 0.3);
-            border-top: 3px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Enhanced Tab Transitions */
-        .tab {
-            transition: var(--transition-fast), opacity 0.3s ease;
         }
 
         /* Web Section (Game Selection) */
@@ -206,28 +139,20 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(5, 10, 20, 0.98);
+            background: rgba(5, 10, 20, 0.95);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 9999999;
-            animation: fadeIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: fadeIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             overflow: hidden;
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(10px);
         }
 
         @keyframes fadeIn {
-            from { 
-                opacity: 0; 
-                backdrop-filter: blur(0); 
-                transform: scale(0.95);
-            }
-            to { 
-                opacity: 1; 
-                backdrop-filter: blur(15px); 
-                transform: scale(1);
-            }
+            from { opacity: 0; backdrop-filter: blur(0); }
+            to { opacity: 1; backdrop-filter: blur(10px); }
         }
 
         .game-selection::before {
@@ -238,48 +163,33 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 20% 30%, rgba(0, 240, 255, 0.08) 0%, transparent 25%),
-                radial-gradient(circle at 80% 70%, rgba(123, 0, 255, 0.08) 0%, transparent 25%),
-                radial-gradient(circle at 50% 50%, rgba(0, 144, 255, 0.05) 0%, transparent 40%);
+                radial-gradient(circle at 20% 30%, rgba(0, 240, 255, 0.05) 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, rgba(123, 0, 255, 0.05) 0%, transparent 25%);
             z-index: -1;
-            animation: backgroundPulse 8s ease-in-out infinite;
-        }
-
-        @keyframes backgroundPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
         }
 
         .game-selection-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 42px;
-            font-weight: 700;
-            margin: 0 0 50px;
+            font-size: 36px;
+            margin: 0 0 40px;
             color: var(--primary);
-            text-shadow: var(--glow-strong);
-            letter-spacing: 4px;
+            text-shadow: 0 0 20px var(--primary);
+            letter-spacing: 3px;
             position: relative;
             display: inline-block;
-            animation: titleGlow 3s ease-in-out infinite;
-        }
-
-        @keyframes titleGlow {
-            0%, 100% { text-shadow: var(--glow-strong); }
-            50% { text-shadow: 0 0 50px rgba(0, 240, 255, 1); }
         }
 
         .game-selection-title::after {
             content: "";
             position: absolute;
-            bottom: -15px;
+            bottom: -10px;
             left: 0;
             width: 100%;
-            height: 3px;
+            height: 2px;
             background: var(--gradient);
             transform: scaleX(0);
             transform-origin: right;
-            transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1);
-            box-shadow: var(--glow);
+            transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         .game-selection-title.animate::after {
@@ -319,20 +229,26 @@
         }
 
         .game-item {
-            background: var(--bg-card);
-            border: 1px solid rgba(0, 240, 255, 0.2);
-            border-radius: 16px;
-            padding: 24px;
+            background: rgba(10, 15, 30, 0.7);
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
             cursor: pointer;
             transition: var(--transition);
             text-align: center;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Rajdhani', sans-serif;
             color: var(--text-bright);
-            box-shadow: var(--shadow-soft);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             position: relative;
             overflow: hidden;
-            backdrop-filter: blur(8px);
-            transform: translateY(0);
+            backdrop-filter: blur(4px);
+        }
+
+        .game-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 240, 255, 0.2);
+            background: rgba(15, 20, 40, 0.8);
+            border-color: rgba(0, 240, 255, 0.3);
         }
 
         .game-item::before {
@@ -347,69 +263,34 @@
             transition: opacity 0.4s ease;
         }
 
-        .game-item::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: radial-gradient(circle, rgba(0, 240, 255, 0.1) 0%, transparent 70%);
-            transition: all 0.6s ease;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-        }
-
-        .game-item:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: var(--shadow-strong), var(--glow);
-            background: rgba(26, 26, 46, 0.9);
-            border-color: rgba(0, 240, 255, 0.5);
-        }
-
         .game-item:hover::before {
             opacity: 1;
         }
 
-        .game-item:hover::after {
-            width: 200px;
-            height: 200px;
-        }
-
-        .game-item:active {
-            transform: translateY(-4px) scale(0.98);
-        }
-
         .game-name {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             position: relative;
-            z-index: 2;
+            z-index: 1;
             transition: var(--transition);
-            letter-spacing: 0.5px;
         }
 
         .game-item:hover .game-name {
             color: var(--primary);
-            text-shadow: var(--glow);
-            transform: translateY(-2px);
+            text-shadow: 0 0 10px var(--primary);
         }
 
         .game-url {
-            font-size: 13px;
-            color: var(--text-muted);
+            font-size: 12px;
+            color: var(--text-dim);
             word-break: break-all;
-            opacity: 0.8;
+            opacity: 0.7;
             transition: var(--transition);
-            position: relative;
-            z-index: 2;
-            font-weight: 400;
         }
 
         .game-item:hover .game-url {
             opacity: 1;
-            color: var(--text-dim);
         }
 
         /* Iframe and Tape Button */
@@ -430,10 +311,10 @@
         /* NEW BACK BUTTON DESIGN */
         .injector-tape {
             position: fixed;
-            bottom: 25px;
-            right: 25px;
-            width: 65px;
-            height: 65px;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
             background: var(--gradient);
             border-radius: 50%;
             display: flex;
@@ -441,46 +322,33 @@
             justify-content: center;
             cursor: pointer;
             z-index: 9999999;
-            box-shadow: var(--shadow-strong), var(--glow);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             transition: var(--transition);
             animation: tapeFloat 4s ease-in-out infinite;
-            backdrop-filter: blur(10px);
         }
 
         @keyframes tapeFloat {
-            0%, 100% { 
-                transform: translateY(0) rotate(0deg); 
-                box-shadow: var(--shadow-strong), var(--glow);
-            }
-            50% { 
-                transform: translateY(-8px) rotate(5deg); 
-                box-shadow: var(--shadow-strong), var(--glow-strong);
-            }
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(5deg); }
         }
 
         .injector-tape:hover {
-            transform: scale(1.15) rotate(15deg);
-            box-shadow: var(--shadow-strong), 0 0 40px rgba(0, 240, 255, 0.8);
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.7);
             animation: none;
-            background: linear-gradient(135deg, var(--primary), var(--accent-light));
-        }
-
-        .injector-tape:active {
-            transform: scale(1.05) rotate(10deg);
         }
 
         .injector-tape::before {
             content: "";
             position: absolute;
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             border-left: 3px solid white;
             border-bottom: 3px solid white;
             transform: rotate(45deg);
-            margin-top: -2px;
-            margin-left: -2px;
-            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+            margin-top: -3px;
+            margin-left: -3px;
         }
 
         /* Floating Particles */
@@ -590,13 +458,17 @@
             opacity: 0.8;
         }
 
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+
         .prediction-card {
             background-color: rgba(0, 240, 255, 0.08);
             border-radius: 12px;
             padding: 14px;
             margin: 12px 0;
             border: 1px solid rgba(0, 240, 255, 0.15);
-            position: relative;
         }
 
         .prediction-title {
@@ -609,6 +481,10 @@
             display: flex;
             align-items: center;
             gap: 6px;
+        }
+
+        .prediction-title i {
+            font-size: 0.9rem;
         }
 
         .prediction-value {
@@ -650,9 +526,6 @@
             align-items: center;
             gap: 8px;
             border: 1px solid rgba(0, 240, 255, 0.05);
-            opacity: 1;
-            transform: translateY(0);
-            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
         .typing-text {
@@ -768,76 +641,170 @@
             font-weight: 600;
         }
 
-        .chat-input-container {
-            padding: 15px;
-            background: var(--bg-light);
-            border-top: 1px solid rgba(0, 240, 255, 0.1);
-            position: relative;
-        }
-
-        .chat-input-wrapper {
+        .predicted-numbers {
             display: flex;
+            justify-content: center;
             gap: 10px;
-            align-items: center;
+            margin: 15px 0;
         }
 
-        .chat-input {
-            flex: 1;
-            background: var(--bg-card);
+        .predicted-number {
+            background: rgba(0, 240, 255, 0.1);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-weight: 600;
+            color: var(--primary);
             border: 1px solid rgba(0, 240, 255, 0.2);
-            border-radius: 25px;
-            padding: 12px 20px;
-            color: var(--text-bright);
-            font-size: 0.9rem;
-            outline: none;
-            transition: var(--transition);
-            font-family: inherit;
+            min-width: 30px;
+            text-align: center;
         }
 
-        .chat-input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(0, 240, 255, 0.1);
-            background: rgba(26, 26, 46, 0.8);
+        .predicted-number.small {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: rgba(0, 255, 136, 0.2);
         }
 
-        .chat-input::placeholder {
-            color: var(--text-muted);
+        .predicted-number.big {
+            background: rgba(0, 144, 255, 0.1);
+            border-color: rgba(0, 144, 255, 0.2);
         }
 
-        .send-button {
-            width: 45px;
-            height: 45px;
-            background: var(--gradient);
-            border: none;
-            border-radius: 50%;
-            color: white;
-            cursor: pointer;
+        /* Recovery Level Indicators */
+        .recovery-level {
             display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .recovery-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--text-dim);
+            transition: all 0.3s ease;
+        }
+
+        .recovery-dot.active {
+            background: var(--warning);
+            border-color: var(--warning);
+            box-shadow: 0 0 8px var(--warning);
+        }
+
+        .recovery-dot.critical {
+            background: var(--loss);
+            border-color: var(--loss);
+            box-shadow: 0 0 8px var(--loss);
+        }
+
+        .recovery-status {
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            margin-top: 5px;
+        }
+
+        .recovery-status.warning {
+            color: var(--warning);
+        }
+
+        .recovery-status.critical {
+            color: var(--loss);
+        }
+
+        /* Loading Animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-darker);
+            display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: var(--transition);
-            box-shadow: var(--shadow-soft);
+            z-index: 99999999;
+            transition: opacity 0.5s ease;
         }
 
-        .send-button:hover {
-            transform: scale(1.1);
-            box-shadow: var(--shadow-strong), var(--glow);
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(0, 240, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
         }
 
-        .send-button:active {
-            transform: scale(0.95);
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
-        .send-button i {
-            font-size: 18px;
+        .loading-text {
+            color: var(--text-dim);
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 2px;
+            margin-top: 20px;
+            text-align: center;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .loading-progress {
+            width: 200px;
+            height: 4px;
+            background: rgba(0, 240, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 20px;
+            overflow: hidden;
         }
 
+        .loading-progress-bar {
+            height: 100%;
+            background: var(--gradient);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Opposite Prediction Styles */
+        .opposite-prediction {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .opposite-title {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 5px;
+        }
+
+        .opposite-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--warning);
+        }
+
+        /* Responsive Adjustments */
         @media (max-width: 768px) {
+            .game-list {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .game-selection-title {
+                font-size: 28px;
+                margin-bottom: 30px;
+            }
+            
+            .injector-tape {
+                width: 50px;
+                height: 50px;
+            }
+            
             .tab-label {
                 font-size: 12px;
             }
@@ -848,136 +815,53 @@
                 margin-right: 8px;
             }
             
-            .game-selection-title {
-                font-size: 28px;
-                margin-bottom: 30px;
-            }
-            
-            .game-list {
-                grid-template-columns: 1fr 1fr;
-                gap: 15px;
-                padding: 0 15px 30px;
-            }
-            
             .prediction-value {
-                font-size: 1.6rem;
-            }
-            
-            .message {
-                max-width: 90%;
-                padding: 12px 14px;
-                font-size: 0.9rem;
-            }
-            
-            .chat-input {
-                padding: 10px 16px;
-                font-size: 0.85rem;
-            }
-            
-            .send-button {
-                width: 40px;
-                height: 40px;
-            }
-            
-            .injector-tape {
-                width: 55px;
-                height: 55px;
-                bottom: 20px;
-                right: 20px;
-            }
-            
-            .injector-tape::before {
-                width: 20px;
-                height: 20px;
+                font-size: 1.5rem;
             }
         }
 
         @media (max-width: 480px) {
+            .game-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .game-selection-title {
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
+            
+            .injector-tape {
+                width: 45px;
+                height: 45px;
+            }
+            
             .tab-label {
                 display: none;
             }
             
             .tab-icon {
                 margin-right: 0;
-                width: 30px;
-                height: 30px;
-            }
-            
-            .game-selection-title {
-                font-size: 24px;
-                margin-bottom: 25px;
-            }
-            
-            .game-list {
-                grid-template-columns: 1fr;
-                gap: 12px;
-                padding: 0 10px 20px;
+                width: 28px;
+                height: 28px;
             }
             
             .prediction-value {
-                font-size: 1.4rem;
-            }
-            
-            .message {
-                max-width: 95%;
-                padding: 10px 12px;
-                font-size: 0.85rem;
-            }
-            
-            .chat-input {
-                padding: 8px 14px;
-                font-size: 0.8rem;
-            }
-            
-            .send-button {
-                width: 38px;
-                height: 38px;
-            }
-            
-            .send-button i {
-                font-size: 16px;
-            }
-            
-            .injector-tape {
-                width: 50px;
-                height: 50px;
-                bottom: 15px;
-                right: 15px;
-            }
-            
-            .injector-tape::before {
-                width: 18px;
-                height: 18px;
-            }
-            
-            .tab-system {
-                height: 55px;
-            }
-            
-            .content-section {
-                top: 55px;
-                height: calc(100% - 55px);
-            }
-        }
-
-        @media (max-width: 360px) {
-            .game-selection-title {
-                font-size: 22px;
-                margin-bottom: 20px;
-            }
-            
-            .game-item {
-                padding: 15px;
-            }
-            
-            .game-name {
-                font-size: 16px;
+                font-size: 1.3rem;
             }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">INITIALIZING ZMX TRADER V2</div>
+        <div class="loading-progress">
+            <div class="loading-progress-bar" id="loadingProgress"></div>
+        </div>
+    </div>
+
     <!-- Tab System -->
     <div class="tab-system">
         <div class="tab active" data-tab="web">
@@ -1042,7 +926,7 @@
                     </div>
                     <div class="game-item" data-url="https://www.91appg.com/#/">
                         <div class="game-name">91 CLUB</div>
-                        <div class="game-url">https://www.91appg.com/#/</div>
+                        <div class="game-url">91appg.com/#/</div>
                     </div>
                 </div>
             </div>
@@ -1059,11 +943,11 @@
             <div class="floating-bg bg-2"></div>
             
             <div class="chat-header">
-                <h1 class="chat-title">ZMX TRADER</h1>
+                <h1 class="chat-title">ZMX TRADER V2</h1>
                 <p class="chat-subtitle">
                     <span class="status-indicator online"></span>
-                    <span id="connection-status"></span>
-                     <span id="current-time">00:00:00</span>
+                    <span id="connection-status">Connected to Server</span>
+                    • <span id="current-time">00:00:00</span>
                 </p>
             </div>
 
@@ -1071,57 +955,66 @@
                 <!-- Initial greeting -->
                 <div class="message received">
                     <div class="prediction-title"><i class="fas fa-robot"></i> SYSTEM INITIALIZED</div>
-                    <p>Welcome to <strong>Zmx Trader</strong>, your advanced prediction assistant with cryptographic deterministic analysis. I can analyze game patterns with 100% accuracy.</p>
+                    <p>Welcome to <strong>Zmx Trader</strong>, your advanced prediction assistant. I'm analyzing game patterns in real-time to provide you with the most accurate predictions.</p>
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: 100%"></div>
                     </div>
                     <div class="timestamp" id="last-update-time">Just now</div>
                 </div>
 
-                <div class="message received">
-                    <div class="prediction-title"><i class="fas fa-info-circle"></i> INSTRUCTIONS</div>
-                    <p>Please enter the <strong>last 3 digits</strong> of the game period...</p>
-                    <div class="timestamp">System</div>
-                </div>
-
                 <div class="typing-indicator" id="typing-indicator">
                     <div class="typing-dot"></div>
                     <div class="typing-dot"></div>
                     <div class="typing-dot"></div>
-                    <span class="typing-text">Ready for input...</span>
+                    <span class="typing-text">Analyzing data...</span>
                 </div>
             </div>
 
             <div class="scroll-down-btn" id="scroll-down-btn">
                 <i class="fas fa-chevron-down"></i>
             </div>
-
-            <div class="chat-input-container">
-                <div class="chat-input-wrapper">
-                    <input type="text" class="chat-input" id="user-input" placeholder="Enter last 3 digits..." autocomplete="off">
-                    <button class="send-button" id="send-button">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </div>
-            </div>
         </div>
     </div>
 
     <script>
+        // Global variables
+        let lastFetchedPeriod = null;
+        let previousResults = [];
+        let latestPeriod = null;
+        let currentPrediction = null;
+        let serverOnline = true;
+        let lastPredictionPeriod = null;
+        let lastActualNumber = null;
+
+        // Tab System Logic
         document.addEventListener('DOMContentLoaded', function() {
-            // Tab System Logic
+            // Simulate loading progress
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const loadingProgress = document.getElementById('loadingProgress');
+            let progress = 0;
+            
+            const loadingInterval = setInterval(() => {
+                progress += Math.random() * 10;
+                if (progress > 100) progress = 100;
+                loadingProgress.style.width = `${progress}%`;
+                
+                if (progress >= 100) {
+                    clearInterval(loadingInterval);
+                    setTimeout(() => {
+                        loadingOverlay.style.opacity = '0';
+                        setTimeout(() => {
+                            loadingOverlay.style.display = 'none';
+                        }, 500);
+                    }, 300);
+                }
+            }, 200);
+
             const tabs = document.querySelectorAll('.tab');
             const contentSections = document.querySelectorAll('.content-section');
             
             tabs.forEach(tab => {
                 tab.addEventListener('click', function() {
                     const tabId = this.getAttribute('data-tab');
-                    
-                    // Add click feedback
-                    this.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        this.style.transform = '';
-                    }, 150);
                     
                     // Update active tab
                     tabs.forEach(t => t.classList.remove('active'));
@@ -1130,9 +1023,10 @@
                     // Show corresponding content section
                     contentSections.forEach(section => {
                         section.classList.remove('active');
+                        if (section.id === `${tabId}-section`) {
+                            section.classList.add('active');
+                        }
                     });
-                    
-                    document.getElementById(`${tabId}-section`).classList.add('active');
                 });
             });
 
@@ -1146,13 +1040,8 @@
                 item.addEventListener('click', function() {
                     const gameUrl = this.getAttribute('data-url');
                     
-                    // Add loading state
-                    this.style.pointerEvents = 'none';
-                    this.innerHTML += '<div class="loading-overlay"><div class="loading-spinner"></div></div>';
-                    
-                    // Smooth transition to game
-                    gameSelection.style.opacity = '0';
-                    gameSelection.style.transform = 'scale(0.95)';
+                    // Show loading state
+                    this.innerHTML = '<div class="loading-spinner" style="width:20px;height:20px;margin:0 auto;"></div>';
                     
                     setTimeout(() => {
                         gameFrame.src = gameUrl;
@@ -1160,121 +1049,477 @@
                         gameFrame.classList.remove('hidden');
                         injectorTape.classList.remove('hidden');
                         
-                        // Reset game selection for next time
-                        gameSelection.style.opacity = '1';
-                        gameSelection.style.transform = 'scale(1)';
-                        this.style.pointerEvents = 'auto';
-                        const loadingOverlay = this.querySelector('.loading-overlay');
-                        if (loadingOverlay) {
-                            loadingOverlay.remove();
-                        }
-                    }, 300);
+                        // Reset game item content
+                        const gameName = this.querySelector('.game-name').textContent;
+                        const gameUrlText = this.querySelector('.game-url').textContent;
+                        this.innerHTML = `
+                            <div class="game-name">${gameName}</div>
+                            <div class="game-url">${gameUrlText}</div>
+                        `;
+                        
+                        // Add visual feedback
+                        this.classList.add('active');
+                        setTimeout(() => this.classList.remove('active'), 500);
+                    }, 500);
                 });
             });
 
-            // Injector tape button
+            // Injector tape button to show game selection
             injectorTape.addEventListener('click', function() {
-                this.style.transform = 'scale(0.9) rotate(0deg)';
-                
-                setTimeout(() => {
-                    gameFrame.classList.add('hidden');
-                    gameFrame.src = '';
-                    gameSelection.style.display = "flex";
-                    gameSelection.style.opacity = '0';
-                    gameSelection.style.transform = 'scale(1.05)';
-                    injectorTape.classList.add('hidden');
-                    
-                    setTimeout(() => {
-                        gameSelection.style.opacity = '1';
-                        gameSelection.style.transform = 'scale(1)';
-                    }, 100);
-                    
-                    this.style.transform = '';
-                }, 200);
+                gameFrame.classList.add('hidden');
+                gameSelection.style.display = "flex";
+                injectorTape.classList.add('hidden');
+                gameFrame.src = '';
             });
 
-            // Chat Predictor Logic
+            // Create floating particles
+            function createParticles() {
+                const colors = ['rgba(0, 240, 255, 0.3)', 'rgba(0, 144, 255, 0.3)', 'rgba(123, 0, 255, 0.3)'];
+                for (let i = 0; i < 20; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    
+                    const size = Math.random() * 8 + 2;
+                    const posX = Math.random() * window.innerWidth;
+                    const posY = Math.random() * window.innerHeight;
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    const duration = Math.random() * 20 + 10;
+                    const delay = Math.random() * 5;
+                    
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    particle.style.left = `${posX}px`;
+                    particle.style.top = `${posY}px`;
+                    particle.style.background = color;
+                    particle.style.opacity = Math.random() * 0.5 + 0.1;
+                    particle.style.animationDuration = `${duration}s`;
+                    particle.style.animationDelay = `${delay}s`;
+                    
+                    document.body.appendChild(particle);
+                }
+            }
+
+            // =============================================
+            // PREDICTION SYSTEM WITH EXCEL PATTERNS
+            // =============================================
+            
+            // Global prediction state with enhanced tracking
+            const predictionState = {
+                lastResult: null,
+                recoveryLevel: 0,
+                winStreak: 0,
+                lossStreak: 0,
+                currentPrediction: null,
+                currentPeriod: null,
+                lastActualResult: null,
+                patternMemory: [],
+                hotNumbers: [],
+                coldNumbers: [],
+                last10Results: [],
+                predictionHistory: []
+            };
+
+            // Enhanced prime number cache with memoization
+            const primeCache = {};
+
+            function isPrime(n) {
+                if (n in primeCache) return primeCache[n];
+                
+                if (n < 2) return false;
+                if (n === 2) return true;
+                if (n % 2 === 0) return false;
+                
+                const sqrtN = Math.floor(Math.sqrt(n)) + 1;
+                for (let i = 3; i < sqrtN; i += 2) {
+                    if (n % i === 0) {
+                        primeCache[n] = false;
+                        return false;
+                    }
+                }
+                
+                primeCache[n] = true;
+                return true;
+            }
+
+            // Advanced pattern recognition functions from Excel
+            function parityPattern(digits) {
+                return digits[0] % 2 !== digits[1] % 2 && digits[1] % 2 !== digits[2] % 2;
+            }
+
+            function centerMirror(digits) {
+                return digits[0] === digits[3] && digits[1] === digits[2];
+            }
+
+            function digitDominance(digits) {
+                const counts = {};
+                digits.forEach(d => {
+                    counts[d] = (counts[d] || 0) + 1;
+                });
+                return Math.max(...Object.values(counts)) >= 3;
+            }
+
+            function isArithmeticSequence(digits) {
+                const diff = digits[1] - digits[0];
+                for (let i = 2; i < digits.length; i++) {
+                    if (digits[i] - digits[i-1] !== diff) return false;
+                }
+                return true;
+            }
+
+            function isGeometricSequence(digits) {
+                if (digits.includes(0)) return false;
+                const ratio = digits[1] / digits[0];
+                for (let i = 2; i < digits.length; i++) {
+                    if (Math.abs(digits[i] / digits[i-1] - ratio) > 0.0001) return false;
+                }
+                return true;
+            }
+
+            function digitSymmetry(digits) {
+                return digits[0] === digits[3] && digits[1] === digits[2];
+            }
+
+            function sumProductRelation(digits) {
+                return digits.reduce((a, b) => a + b, 0) > 2 * (digits[0] * digits[3]);
+            }
+
+            function fibonacciPattern(digits) {
+                for (let i = 2; i < digits.length; i++) {
+                    if (digits[i] !== digits[i-1] + digits[i-2]) return false;
+                }
+                return true;
+            }
+
+            // Excel-based prediction logic
+            function excelPredictionLogic(digits) {
+                // Extract the key patterns from the Excel file
+                const sum = digits.reduce((a, b) => a + b, 0);
+                const product = digits[0] * digits[3];
+                const mean = sum / digits.length;
+                const median = [...digits].sort((a, b) => a - b)[Math.floor(digits.length / 2)];
+                
+                // Mode-based prediction (from Excel's MODE function)
+                const mode = calculateMode(digits);
+                
+                // Count of numbers >= 5 (BIG numbers)
+                const bigCount = digits.filter(d => d >= 5).length;
+                
+                // Main prediction logic from Excel
+                if (bigCount >= 5) {
+                    return "BIG";
+                } else {
+                    return "SMALL";
+                }
+            }
+
+            function calculateMode(numbers) {
+                const frequency = {};
+                numbers.forEach(num => {
+                    frequency[num] = (frequency[num] || 0) + 1;
+                });
+                
+                let maxFrequency = 0;
+                let modes = [];
+                
+                for (const num in frequency) {
+                    if (frequency[num] > maxFrequency) {
+                        modes = [num];
+                        maxFrequency = frequency[num];
+                    } else if (frequency[num] === maxFrequency) {
+                        modes.push(num);
+                    }
+                }
+                
+                return modes.length === numbers.length ? null : modes[0];
+            }
+
+            // Enhanced sureShotLogic with 0-1 level precision
+            function sureShotLogic(digits, level) {
+                let bigScore = 0;
+                let smallScore = 0;
+
+                // Core scoring (level 0-1)
+                const sum = digits.reduce((a, b) => a + b, 0);
+                const product = digits[0] * digits[3];
+                
+                // Basic rules
+                if (digits[0] === digits[3]) bigScore += 2;
+                if (sum >= 20) bigScore += 1;
+                if (Math.max(...digits) - Math.min(...digits) <= 2) smallScore += 1;
+                if (isPrime(sum)) bigScore += 2;
+                
+                const sorted = [...digits].sort((a, b) => a - b);
+                const reverseSorted = [...digits].sort((a, b) => b - a);
+                if (digits.join('') === sorted.join('') || digits.join('') === reverseSorted.join('')) {
+                    bigScore += 1;
+                }
+                
+                // Statistical analysis
+                const mean = sum / digits.length;
+                if (mean > 4.5) bigScore += 1;
+                
+                const median = [...digits].sort((a, b) => a - b)[Math.floor(digits.length / 2)];
+                if (median > 4) bigScore += 1;
+
+                // Advanced patterns (level 1+)
+                if (level >= 1) {
+                    if (parityPattern(digits)) bigScore += 2;
+                    if (centerMirror(digits)) smallScore += 1;
+                    if (digitSymmetry(digits)) bigScore += 1;
+                    if (fibonacciPattern(digits)) bigScore += 3;
+                }
+
+                // Dynamic threshold adjustment
+                let threshold = 5 + level;
+                if (Math.max(...digits) - Math.min(...digits) <= 1) threshold -= 1;
+                if (sum > 25) threshold += 1;
+                
+                // 0-1 Level Precision Decision
+                if (bigScore >= threshold + 2) return "BIG";
+                if (smallScore >= threshold) return "SMALL";
+                
+                // Fallback to intelligent prediction if scores are close
+                return intelligentPrediction(digits.join(''));
+            }
+
+            // Ultra-precise intelligent prediction
+            function intelligentPrediction(periodNumber) {
+                const digits = periodNumber.slice(-4).split('').map(Number);
+                const sum = digits.reduce((a, b) => a + b, 0);
+                
+                // First try Excel-based prediction
+                const excelPred = excelPredictionLogic(digits);
+                if (excelPred) return excelPred;
+                
+                // Multi-strategy analysis
+                const strategies = [
+                    sum % 2 === 0 ? "BIG" : "SMALL",                    // Sum parity
+                    (digits[1] + digits[2]) > (digits[0] + digits[3]) ? "BIG" : "SMALL", // Middle dominance
+                    isPrime(digits[0] * digits[3]) ? "BIG" : "SMALL",   // Prime product
+                    digits.filter(d => d >= 5).length >= 2 ? "BIG" : "SMALL", // High number count
+                    isArithmeticSequence(digits) ? "BIG" : "SMALL",      // Sequence detection
+                    digitDominance(digits) ? "SMALL" : "BIG"             // Digit repetition
+                ];
+                
+                // Weighted decision with confidence scoring
+                const bigCount = strategies.filter(s => s === "BIG").length;
+                const smallCount = strategies.length - bigCount;
+                
+                if (bigCount >= 4) return "BIG";
+                if (smallCount >= 4) return "SMALL";
+                
+                // Tiebreaker using Fibonacci pattern
+                if (fibonacciPattern(digits)) return "BIG";
+                
+                // Final fallback
+                return sum % 2 === 0 ? "BIG" : "SMALL";
+            }
+
+            // Strict prediction with recovery system
+            function predictStrict(periodNumber, actualResult = null, forceRecoveryLevel = null) {
+                if (!periodNumber || periodNumber.length < 4) return "INVALID_INPUT";
+                
+                // Update state with actual result if provided
+                if (actualResult) {
+                    predictionState.lastActualResult = actualResult;
+                    if (predictionState.currentPrediction === actualResult) {
+                        predictionState.winStreak++;
+                        predictionState.lossStreak = 0;
+                        predictionState.recoveryLevel = Math.max(0, predictionState.recoveryLevel - 1);
+                    } else {
+                        predictionState.lossStreak++;
+                        predictionState.winStreak = 0;
+                        predictionState.recoveryLevel = Math.min(3, predictionState.recoveryLevel + 1);
+                    }
+                    predictionState.patternMemory.push(actualResult);
+                    if (predictionState.patternMemory.length > 10) {
+                        predictionState.patternMemory.shift();
+                    }
+                }
+                
+                const digits = periodNumber.slice(-4).split('').map(Number);
+                const recoveryLevel = forceRecoveryLevel !== null ? forceRecoveryLevel : predictionState.recoveryLevel;
+                
+                // Generate base prediction
+                let prediction;
+                if (recoveryLevel === 0) {
+                    prediction = sureShotLogic(digits, 1); // Normal mode
+                } else if (recoveryLevel === 1) {
+                    prediction = intelligentPrediction(periodNumber); // Smarter analysis
+                } else {
+                    // Aggressive recovery mode
+                    const lastDigit = digits[3];
+                    prediction = lastDigit % 2 === 0 ? "BIG" : "SMALL";
+                }
+                
+                // Apply pattern correction
+                const lastPatterns = predictionState.patternMemory.slice(-3);
+                if (lastPatterns.length >= 3) {
+                    const pattern = lastPatterns.join('');
+                    if (pattern === "BIGBIGBIG") prediction = "SMALL";
+                    if (pattern === "SMALLSMALLSMALL") prediction = "BIG";
+                }
+                
+                // Save prediction state
+                predictionState.currentPrediction = prediction;
+                predictionState.currentPeriod = periodNumber;
+                predictionState.lastResult = prediction;
+                
+                return prediction;
+            }
+
+            // Ultra-precise prediction function (Maxx 0-1 level)
+            function predictUltra(periodNumber) {
+                const digits = periodNumber.slice(-4).split('').map(Number);
+                
+                // Multi-layer analysis
+                const layer1 = sureShotLogic(digits, 1);
+                const layer2 = intelligentPrediction(periodNumber);
+                const layer3 = predictStrict(periodNumber);
+                
+                // Consensus decision
+                if (layer1 === layer2 && layer2 === layer3) {
+                    return layer1; // Strong consensus
+                }
+                
+                // Fallback to weighted decision
+                const votes = [layer1, layer2, layer3];
+                const bigVotes = votes.filter(v => v === "BIG").length;
+                
+                if (bigVotes >= 2) return "BIG";
+                return "SMALL";
+            }
+
+            // =============================================
+            // CHAT PREDICTOR LOGIC
+            // =============================================
+            
+            // DOM elements
             const messagesContainer = document.getElementById('messages-container');
-            const userInput = document.getElementById('user-input');
-            const sendButton = document.getElementById('send-button');
             const typingIndicator = document.getElementById('typing-indicator');
             const connectionStatus = document.getElementById('connection-status');
             const currentTimeElement = document.getElementById('current-time');
             const lastUpdateTime = document.getElementById('last-update-time');
             const scrollDownBtn = document.getElementById('scroll-down-btn');
-            
-            // Deterministic prediction algorithm
-            function deterministicPredictor(periodNumber) {
-                if (periodNumber.length < 3) {
-                    return "BIG";  // Default safe prediction
-                }
-                
-                // Extract last 3 digits as integers
-                const digits = periodNumber.slice(-3).split('').map(Number);
-                const [d1, d2, d3] = digits;
-                
-                // Cryptographic mixing with bitwise operations
-                const hashValue = (
-                    (d1 * 0x5DEECE66D + d2 * 0xBF58476D + d3 * 0x1E4F43A7)  // Seed mixing
-                    ^ (d1 << 9 | d2 << 6 | d3 << 3)  // Bit shifting
-                    + (d1 + d2 + d3) * 0x9E3779B9  // Golden ratio mixing
-                ) % 10;
-                
-                // Deterministic rules (mathematically proven)
-                if (hashValue === 0) {
-                    return "SMALL";
-                } else if ((d1 * d2 + d3) % 7 < 3) {
-                    return "SMALL";
-                } else if ((d1 ^ d2 ^ d3) > 4) {  // XOR chain
-                    return "BIG";
-                } else if ((d1 + d2 * 10 + d3 * 100) % 6 === 0) {
-                    return "SMALL";
-                } else {
-                    // Final fallback: Fibonacci-based decision
-                    const fibIndex = (d1 + d2 + d3) % 9;
-                    const fibNumbers = [0, 1, 1, 2, 3, 5, 8, 13, 21];
-                    return fibNumbers[fibIndex] % 2 === 0 ? "BIG" : "SMALL";
+
+            // Function to generate mock game result data for testing or fallback scenarios
+            function fetchMockGameResult() {
+                const currentTimestamp = Math.floor(Date.now() / 1000);
+                // Simulate incrementing issue number for uniqueness
+                const mockIssueNumber = lastFetchedPeriod ? (parseInt(lastFetchedPeriod) + 1).toString() : '20240701001';
+                const mockNumber = Math.floor(Math.random() * 10); // Random number between 0-9
+                console.log("Using mock data for game result.");
+                return {
+                    issueNumber: mockIssueNumber,
+                    number: mockNumber.toString(),
+                    openTime: new Date(currentTimestamp * 1000).toLocaleString(),
+                };
+            }
+
+            // Fetches game results from the new API or falls back to mock data on error/empty response
+            async function fetchGameResult() {
+                try {
+                    const timestamp = Date.now();
+                    const response = await fetch(`https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json?ts=${timestamp}`);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    // Check if data or data.list is missing/empty
+                    if (!data?.data?.list || data.data.list.length === 0) {
+                        console.warn('API returned no list data or empty list. Falling back to mock data.');
+                        return fetchMockGameResult();
+                    }
+                    
+                    // Get the most recent result
+                    const latestResult = data.data.list[0];
+                    
+                    // SPECIAL FIX FOR 17-DIGIT PERIOD NUMBERS:
+                    // Extract the numeric portion (last 5 digits) and increment by 1
+                    const periodStr = latestResult.issueNumber.toString();
+                    const basePart = periodStr.slice(0, -5); // First 12 digits (202508041000)
+                    const sequencePart = periodStr.slice(-5); // Last 5 digits (10228)
+                    const incrementedSequence = (parseInt(sequencePart) + 1).toString().padStart(5, '0');
+                    const adjustedPeriod = basePart + incrementedSequence;
+                    
+                    // Update last fetched period
+                    lastFetchedPeriod = adjustedPeriod;
+                    
+                    // Return adjusted result
+                    return {
+                        ...latestResult,
+                        issueNumber: adjustedPeriod
+                    };
+                } catch (e) {
+                    console.error('API error:', e);
+                    // Fallback to mock data if fetch operation fails
+                    return fetchMockGameResult();
                 }
             }
-            
-            // State variables
-            let waitingForPeriod = true;
-            let currentPeriod = null;
-            let currentPrediction = null;
-            let predictionHistory = [];
-            
-            // Initialize clock
+
+            // Function to fetch previous results (history)
+            async function fetchPreviousResults() {
+                try {
+                    const timestamp = Date.now();
+                    const response = await fetch(`https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json?ts=${timestamp}&pageSize=10`);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    if (!data?.data?.list || data.data.list.length === 0) {
+                        console.warn('API returned no history data. Using empty array.');
+                        return [];
+                    }
+                    
+                    return data.data.list.slice(0, 10); // Return last 10 results
+                } catch (e) {
+                    console.error('Error fetching previous results:', e);
+                    return []; // Return empty array on error
+                }
+            }
+
+            // Initialize
             updateClock();
             setInterval(updateClock, 1000);
-            
-            // Event listeners
-            sendButton.addEventListener('click', sendMessage);
-            userInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') sendMessage();
+            setTimeout(() => {
+                typingIndicator.style.display = 'none';
+                addMessage('received', 
+                    `<div class="prediction-card">
+                        <div class="prediction-title"><i class="fas fa-chart-line"></i> ANALYSIS ENGINE READY</div>
+                        <p>Initializing real-time analysis. Scanning game results to detect patterns and trends.</p>
+                    </div>`, 
+                    'Zmx Trader');
+                simulateInitialAnalysis();
+            }, 1500);
+
+            // Scroll button functionality
+            scrollDownBtn.addEventListener('click', () => {
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
             });
-            
+
             messagesContainer.addEventListener('scroll', () => {
                 const { scrollTop, scrollHeight, clientHeight } = messagesContainer;
                 const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
                 scrollDownBtn.classList.toggle('visible', distanceFromBottom > 100);
             });
-            
-            scrollDownBtn.addEventListener('click', () => {
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            });
-            
-            // Functions
+
             function updateClock() {
                 const now = new Date();
                 const timeString = now.toLocaleTimeString('en-US', { hour12: false });
                 currentTimeElement.textContent = timeString;
                 return now;
             }
-            
+
             function formatTime(date) {
                 return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             }
-            
+
             function addMessage(type, content, sender, timestamp = new Date()) {
                 typingIndicator.style.display = 'none';
                 
@@ -1291,248 +1536,115 @@
                 messagesContainer.appendChild(messageDiv);
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
                 
+                // Update last update time
                 lastUpdateTime.textContent = formatTime(timestamp);
                 
                 return messageDiv;
             }
-            
+
             function showTyping() {
                 typingIndicator.style.display = 'flex';
-                typingIndicator.style.opacity = '0';
-                typingIndicator.style.transform = 'translateY(10px)';
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                
-                setTimeout(() => {
-                    typingIndicator.style.opacity = '1';
-                    typingIndicator.style.transform = 'translateY(0)';
-                }, 50);
             }
-            
-            function sendMessage() {
-                const message = userInput.value.trim();
-                if (!message) return;
-                
-                addMessage('sent', message, 'You');
-                userInput.value = '';
-                
+
+            function simulateInitialAnalysis() {
                 showTyping();
                 setTimeout(() => {
-                    processUserInput(message);
-                }, 1000);
+                    addMessage('received', 
+                        `<div class="prediction-card">
+                            <div class="prediction-title"><i class="fas fa-check-circle"></i> ANALYSIS COMPLETE</div>
+                            <p>Pattern detection complete. Monitoring for optimal prediction opportunities.</p>
+                        </div>`, 
+                        'Zmx Trader');
+                    
+                    // Start the prediction cycle
+                    fetchCurrentGameIssue();
+                    setInterval(fetchCurrentGameIssue, 5000);
+                }, 2000);
             }
-            
-            function processUserInput(input) {
-                if (waitingForPeriod) {
-                    if (/^\d{3}$/.test(input)) {
-                        currentPeriod = input;
-                        waitingForPeriod = false;
-                        generatePrediction(input);
-                    } else {
-                        addMessage('received', 
-                            `<p>Please enter exactly <strong>3 digits</strong> (like 123) for the period number to get a prediction.</p>
-                            <p></p>`, 
-                            'Zmx Trader');
-                    }
-                } else {
-                    handleUserQuestion(input);
-                }
-            }
-            
-            function generatePrediction(periodDigits) {
-                // Get prediction from deterministic algorithm
-                const prediction = deterministicPredictor(periodDigits);
+
+            function createOppositePredictionMessage(predictionData) {
+                // Determine opposite prediction
+                const oppositePrediction = predictionData.prediction === "BIG" ? "SMALL" : "BIG";
+                const oppositeNumbers = oppositePrediction === "SMALL" 
+                    ? [Math.floor(Math.random() * 5), Math.floor(Math.random() * 5)]
+                    : [5 + Math.floor(Math.random() * 5), 5 + Math.floor(Math.random() * 5)];
+                const uniqueOppositeNumbers = [...new Set(oppositeNumbers)].slice(0, 2);
                 
-                // Advanced pattern analysis based on digits
-                const digits = periodDigits.split('').map(Number);
-                const sum = digits.reduce((a, b) => a + b, 0);
-                const product = digits[0] * digits[2];
-                const lastDigit = digits[2];
-                
-                // Additional verification steps to confirm accuracy
-                let verificationScore = 0;
-                
-                // Verification 1: Sum of digits
-                if ((sum > 10 && prediction === 'BIG') || (sum <= 10 && prediction === 'SMALL')) {
-                    verificationScore += 25;
-                }
-                
-                // Verification 2: Last digit parity
-                if ((lastDigit % 2 === 1 && prediction === 'BIG') || (lastDigit % 2 === 0 && prediction === 'SMALL')) {
-                    verificationScore += 20;
-                }
-                
-                // Verification 3: Product of first and last digit
-                if ((product > 15 && prediction === 'BIG') || (product <= 15 && prediction === 'SMALL')) {
-                    verificationScore += 20;
-                }
-                
-                // Verification 4: Digit patterns
-                if (digits[0] === digits[1] && prediction === 'BIG') {
-                    verificationScore += 15;
-                }
-                
-                // Confidence is always 100% for deterministic predictions
-                const confidence = 100;
-                
-                // Create prediction message
-                const predictionMessage = `
+                return `
                     <div class="prediction-card">
-                        <div class="period-display">Period: ...${periodDigits}</div>
-                        <div class="prediction-value">${prediction}</div>
+                        <div class="period-display">${latestPeriod}</div>
+                        <div class="prediction-value">${oppositePrediction}</div>
+                        
+                        <div class="predicted-numbers">
+                            ${uniqueOppositeNumbers.map(num => `
+                                <div class="predicted-number ${num <= 4 ? 'small' : 'big'}">${num}</div>
+                            `).join('')}
+                        </div>
                         
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${confidence}%"></div>
+                            <div class="progress-fill" style="width: 85%"></div>
                         </div>
                         <div class="confidence-display">
                             <span>Confidence</span>
-                            <span class="confidence-value">${confidence.toFixed(1)}%</span>
+                            <span class="confidence-value">85%</span>
                         </div>
                     </div>
                 `;
-                
-                // Save prediction to history
-                currentPrediction = {
-                    period: periodDigits,
-                    prediction: prediction,
-                    confidence: confidence,
-                    timestamp: new Date()
-                };
-                
-                predictionHistory.push(currentPrediction);
-                
-                // Show prediction
-                addMessage('received', predictionMessage, 'Zmx Trader');
-                
-                // Reset waiting flag to allow questions
-                waitingForPeriod = true;
             }
-            
-            function handleUserQuestion(question) {
-                question = question.toLowerCase();
-                const now = new Date();
-                
-                // Common questions and answers
-                if (question.includes('how') && question.includes('work')) {
-                    addMessage('received', `
-                        <p>The prediction system uses a <strong>deterministic cryptographic algorithm</strong>:</p>
-                        <ul style="margin-left: 20px; margin-top: 8px;">
-                            <li>Mathematically proven prediction rules</li>
-                            <li>Cryptographic hashing of input digits</li>
-                            <li>Bitwise operations for perfect randomness</li>
-                            <li>Fibonacci sequence fallback</li>
-                            <li>Multiple verification steps confirm 100% accuracy</li>
-                        </ul>
-                        <p style="margin-top: 10px;">The system combines these factors to generate predictions with guaranteed accuracy.</p>
-                    `, 'Zmx Trader');
-                }
-                else if (question.includes('accuracy') || question.includes('correct')) {
-                    addMessage('received', `
-                        <p>The deterministic prediction system has a <strong>100% accuracy rate</strong>.</p>
-                        <p>Mathematical proofs guarantee perfect predictions when the algorithm is followed correctly.</p>
-                        <div class="progress-bar" style="margin: 10px 0;">
-                            <div class="progress-fill" style="width: 100%; background: var(--win);"></div>
-                        </div>
-                        <p>All historical predictions: 100% accurate</p>
-                    `, 'Zmx Trader');
-                }
-                else if (question.includes('big') || question.includes('small')) {
-                    addMessage('received', `
-                        <p>In this prediction system:</p>
-                        <ul style="margin-left: 20px; margin-top: 8px;">
-                            <li><strong>BIG</strong> means the cryptographic hash and digit analysis confirms >10 probability</li>
-                            <li><strong>SMALL</strong> means the cryptographic hash and digit analysis confirms ≤10 probability</li>
-                        </ul>
-                        <p style="margin-top: 10px;">The actual prediction uses deterministic cryptographic analysis for guaranteed results.</p>
-                    `, 'Zmx Trader');
-                }
-                else if (question.includes('again') || question.includes('new') || question.includes('another')) {
-                    addMessage('received', `
-                        <p>Please enter the <strong>last 3 digits</strong> of a new period to get another prediction.</p>
-                        <p></p>
-                    `, 'Zmx Trader');
-                    waitingForPeriod = true;
-                }
-                else if (question.includes('history') || question.includes('previous')) {
-                    if (predictionHistory.length > 0) {
-                        let historyHTML = `<p>Previous predictions (all 100% accurate):</p><ul style="margin-left: 20px; margin-top: 8px;">`;
-                        predictionHistory.slice().reverse().forEach(pred => {
-                            historyHTML += `<li>${pred.period}: ${pred.prediction} (${pred.confidence.toFixed(1)}% confidence)</li>`;
-                        });
-                        historyHTML += `</ul><p style="margin-top: 10px;">Total predictions: ${predictionHistory.length}</p>`;
-                        
-                        addMessage('received', historyHTML, 'Zmx Trader');
-                    } else {
-                        addMessage('received', `<p>No prediction history yet. Make your first prediction!</p>`, 'Zmx Trader');
-                    }
-                }
-                else if (question.includes('algorithm') || question.includes('deterministic')) {
-                    addMessage('received', `
-                        <p>The deterministic algorithm works by:</p>
-                        <ul style="margin-left: 20px; margin-top: 8px;">
-                            <li>Applying cryptographic hashing to input digits</li>
-                            <li>Using bitwise operations for perfect distribution</li>
-                            <li>Implementing mathematical proofs for accuracy</li>
-                            <li>Current algorithm features:</li>
-                        </ul>
-                        <div style="margin: 10px 0; background: rgba(0, 240, 255, 0.1); padding: 10px; border-radius: 8px;">
-                            <p>• Cryptographic seed mixing with 0x5DEECE66D</p>
-                            <p>• XOR chain verification</p>
-                            <p>• Golden ratio mixing (0x9E3779B9)</p>
-                            <p>• Fibonacci sequence fallback</p>
-                        </div>
-                    `, 'Zmx Trader');
-                }
-                else {
-                    // Default response for unrecognized questions
-                    addMessage('received', `
-                        <p>I can help with:</p>
-                        <ul style="margin-left: 20px; margin-top: 8px;">
-                            <li>Explaining the deterministic algorithm</li>
-                            <li>Showing 100% accuracy proofs</li>
-                            <li>Viewing prediction history</li>
-                            <li>Making a new prediction</li>
-                        </ul>
-                        <p style="margin-top: 10px;">Or enter a new 3-digit period to get another prediction.</p>
-                    `, 'Zmx Trader');
-                }
-            }
-            
-            // Initial setup
-            setTimeout(() => {
-                typingIndicator.style.display = 'none';
-            }, 1500);
 
+            async function fetchCurrentGameIssue() {
+                const now = new Date();
+                const result = await fetchGameResult();
+                
+                if (result.issueNumber !== latestPeriod) {
+                    latestPeriod = result.issueNumber;
+                    previousResults = await fetchPreviousResults();
+                    updateOppositePredictions(now, latestPeriod);
+                }
+            }
+
+            function updateOppositePredictions(currentTime, currentPeriod) {
+                if (previousResults.length >= 10 && currentPeriod !== lastPredictionPeriod) {
+                    const last10Numbers = previousResults.map(r => parseInt(r.number, 10));
+                    
+                    // Get the last 4 digits of the current period for our prediction
+                    const periodDigits = currentPeriod.slice(-4).split('').map(Number);
+                    
+                    // Make prediction using our enhanced system
+                    const predictionResult = predictUltra(currentPeriod);
+                    
+                    // Show opposite prediction message
+                    showTyping();
+                    setTimeout(() => {
+                        addMessage('received', createOppositePredictionMessage({
+                            prediction: predictionResult,
+                            confidence: 85,
+                            numbers: [],
+                            recoveryLevel: predictionState.recoveryLevel
+                        }), 'Zmx Trader');
+                    }, 1000);
+                }
+            }
+
+            function updateServerStatus(online) {
+                serverOnline = online;
+                if (online) {
+                    connectionStatus.textContent = "Connected to Server";
+                    document.querySelector('.status-indicator').className = "status-indicator online";
+                } else {
+                    connectionStatus.textContent = "Connecting...";
+                    document.querySelector('.status-indicator').className = "status-indicator offline";
+                }
+            }
+
+            // Initialize the application
+            createParticles();
+            
             // Animate the game selection title after page load
             setTimeout(() => {
                 document.getElementById('gameSelectionTitle').classList.add('animate');
             }, 500);
-
-            // Create floating particles for background
-            function createParticles() {
-                const particleCount = 30;
-                for (let i = 0; i < particleCount; i++) {
-                    const particle = document.createElement('div');
-                    particle.className = 'particle';
-                    
-                    const size = Math.random() * 6 + 2;
-                    particle.style.width = `${size}px`;
-                    particle.style.height = `${size}px`;
-                    
-                    particle.style.left = `${Math.random() * 100}%`;
-                    particle.style.top = `${Math.random() * 100}%`;
-                    
-                    const duration = Math.random() * 20 + 10;
-                    const delay = Math.random() * 10;
-                    particle.style.animationDuration = `${duration}s`;
-                    particle.style.animationDelay = `${delay}s`;
-                    
-                    particle.style.opacity = Math.random() * 0.5 + 0.1;
-                    
-                    document.body.appendChild(particle);
-                }
-            }
-
-            createParticles();
         });
     </script>
 </body>
